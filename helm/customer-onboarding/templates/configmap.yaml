@@ -1,0 +1,13 @@
+{{- if and .Values.configMap.enabled .Values.configMap.data }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configMap.name | default (include "customer-onboarding.fullname" .) }}
+  labels:
+    {{- include "customer-onboarding.labels" . | nindent 4 }}
+data:
+  {{- range $key, $value := .Values.configMap.data }}
+  {{ $key }}: |
+{{ $value | indent 4 }}
+  {{- end }}
+{{- end }}

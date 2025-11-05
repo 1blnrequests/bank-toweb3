@@ -1,0 +1,15 @@
+apiVersion: v2
+name: customer-onboarding
+description: Helm chart for the customer onboarding and KYC service
+version: 0.1.0
+appVersion: 1.0.0
+type: application
+keywords:
+  - onboarding
+  - kyc
+  - banking
+maintainers:
+  - name: Customer Experience Squad
+    email: cx-squad@your-org.com
+sources:
+  - https://github.com/your-org/customer-onboarding

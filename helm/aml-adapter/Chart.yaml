@@ -1,0 +1,15 @@
+apiVersion: v2
+name: aml-adapter
+description: Adapter service for blockchain AML checks
+version: 0.1.0
+appVersion: 1.0.0
+type: application
+sources:
+  - https://github.com/your-org/aml-adapter
+keywords:
+  - compliance
+  - aml
+  - web3
+maintainers:
+  - name: Compliance Engineering
+    email: compliance@your-org.com

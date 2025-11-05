@@ -1,0 +1,95 @@
+replicaCount: 2
+
+image:
+  repository: your-repo/aml-adapter
+  tag: 1.1.0
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 7070
+  annotations: {}
+  extraPorts: []
+
+resources:
+  limits:
+    cpu: 400m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+env:
+  - name: AML_PROVIDER
+    value: chainalysis
+  - name: CALLBACK_URL
+    value: https://compliance.your-domain.com/callback
+  - name: KAFKA_BROKERS
+    valueFrom:
+      secretKeyRef:
+        name: kafka-connection
+        key: brokers
+  - name: ALERT_THRESHOLD
+    value: "0.7"
+
+extraEnvFrom: []
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+  initialDelaySeconds: 20
+  periodSeconds: 15
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 75
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: web3-gateway
+      ports:
+        - protocol: TCP
+          port: 7070

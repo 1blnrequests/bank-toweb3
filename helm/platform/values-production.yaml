@@ -1,0 +1,93 @@
+web3-gateway:
+  replicaCount: 6
+  image:
+    tag: 1.4.0
+  ingress:
+    hosts:
+      - host: api.bank-web3.example
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: web3-gateway-prod-tls
+        hosts:
+          - api.bank-web3.example
+  autoscaling:
+    minReplicas: 6
+    maxReplicas: 18
+  service:
+    type: LoadBalancer
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb-ip
+
+custody-service:
+  replicaCount: 4
+  image:
+    tag: 2.2.0
+  persistence:
+    size: 50Gi
+  metrics:
+    port: 9100
+  serviceMonitor:
+    interval: 15s
+    scrapeTimeout: 5s
+
+aml-adapter:
+  replicaCount: 4
+  image:
+    tag: 1.2.0
+  autoscaling:
+    minReplicas: 4
+    maxReplicas: 8
+
+customer-onboarding:
+  replicaCount: 5
+  image:
+    tag: 1.1.2
+  ingress:
+    hosts:
+      - host: onboarding.bank-web3.example
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: onboarding-prod-tls
+        hosts:
+          - onboarding.bank-web3.example
+  autoscaling:
+    minReplicas: 5
+    maxReplicas: 15
+
+payments-orchestrator:
+  replicaCount: 8
+  image:
+    tag: 2.5.0
+  kafka:
+    brokersSecret: kafka-production
+  redis:
+    host: redis.production.svc.cluster.local
+  featureFlags:
+    enableInstantSepa: true
+    enableCryptoOffRamp: true
+  podDisruptionBudget:
+    minAvailable: 4
+  tolerations:
+    - key: dedicated
+      operator: Equal
+      value: payments
+      effect: NoSchedule
+
+risk-engine:
+  replicaCount: 10
+  image:
+    tag: 1.1.0
+  modelRepository:
+    url: s3://risk-models/prod/stable
+  featureToggles:
+    enableShadowModel: true
+    enableExplainability: true
+  podDisruptionBudget:
+    minAvailable: 6
+  openTelemetry:
+    endpoint: otlp-collector.observability.svc.cluster.local:4317

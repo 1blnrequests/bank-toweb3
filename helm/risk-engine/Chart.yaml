@@ -1,0 +1,15 @@
+apiVersion: v2
+name: risk-engine
+description: Real-time fraud and credit risk scoring engine
+version: 0.1.0
+appVersion: 0.9.5
+type: application
+keywords:
+  - risk
+  - fraud
+  - scoring
+maintainers:
+  - name: Risk & Intelligence
+    email: risk-intelligence@your-org.com
+sources:
+  - https://github.com/your-org/risk-engine

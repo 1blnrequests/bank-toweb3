@@ -1,0 +1,67 @@
+web3-gateway:
+  replicaCount: 4
+  image:
+    tag: 1.3.0
+  ingress:
+    hosts:
+      - host: api.staging.bank-web3.example
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: web3-gateway-staging-tls
+        hosts:
+          - api.staging.bank-web3.example
+  autoscaling:
+    minReplicas: 4
+    maxReplicas: 10
+
+custody-service:
+  replicaCount: 3
+  image:
+    tag: 2.1.0
+  persistence:
+    size: 20Gi
+
+aml-adapter:
+  replicaCount: 3
+  image:
+    tag: 1.1.1
+
+customer-onboarding:
+  replicaCount: 4
+  image:
+    tag: 1.1.0
+  ingress:
+    hosts:
+      - host: onboarding.staging.bank-web3.example
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: onboarding-staging-tls
+        hosts:
+          - onboarding.staging.bank-web3.example
+
+payments-orchestrator:
+  replicaCount: 5
+  image:
+    tag: 2.4.0
+  kafka:
+    brokersSecret: kafka-staging
+  redis:
+    host: redis.staging.svc.cluster.local
+  featureFlags:
+    enableCryptoOffRamp: true
+  podDisruptionBudget:
+    minAvailable: 3
+
+risk-engine:
+  replicaCount: 6
+  image:
+    tag: 1.0.0
+  modelRepository:
+    url: s3://risk-models/staging/latest
+  featureToggles:
+    enableShadowModel: true
+    enableExplainability: true

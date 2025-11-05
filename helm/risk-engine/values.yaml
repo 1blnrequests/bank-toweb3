@@ -1,0 +1,189 @@
+replicaCount: 5
+
+image:
+  repository: your-repo/risk-engine
+  tag: 0.9.5
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/role: "risk-engine"
+  vault.hashicorp.com/agent-inject-secret-config.env: secret/data/platform/risk-engine
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 7075
+  annotations: {}
+  extraPorts:
+    - name: grpc
+      port: 9443
+      targetPort: grpc
+      protocol: TCP
+    - name: metrics
+      port: 9105
+      targetPort: metrics
+      protocol: TCP
+
+resources:
+  limits:
+    cpu: 1500m
+    memory: 2048Mi
+  requests:
+    cpu: 750m
+    memory: 1024Mi
+
+javaOpts: "-Xms1024m -Xmx1536m"
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+  initialDelaySeconds: 40
+  periodSeconds: 15
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: http
+  initialDelaySeconds: 20
+  periodSeconds: 10
+
+serviceMonitor:
+  enabled: true
+  interval: 10s
+  scrapeTimeout: 5s
+  labels:
+    team: risk
+
+autoscaling:
+  enabled: true
+  minReplicas: 5
+  maxReplicas: 15
+  targetCPUUtilizationPercentage: 65
+  targetMemoryUtilizationPercentage: 70
+
+modelRepository:
+  url: s3://risk-models/latest
+  refreshIntervalSeconds: 300
+
+openTelemetry:
+  enabled: true
+  endpoint: otlp-collector.observability.svc.cluster.local:4317
+
+grpcClients:
+  custodyService: custody-service.web3.svc.cluster.local:9090
+  payments: payments-orchestrator.web3.svc.cluster.local:8443
+
+featureToggles:
+  enableBehavioralScoring: true
+  enableExplainability: true
+  enableShadowModel: false
+
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              platform: web3
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: web3-gateway
+      ports:
+        - protocol: TCP
+          port: 7075
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              platform: web3
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: payments-orchestrator
+      ports:
+        - protocol: TCP
+          port: 9443
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kafka
+      ports:
+        - protocol: TCP
+          port: 9092
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      ports:
+        - protocol: TCP
+          port: 4317
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 3
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+                - risk-engine
+        topologyKey: kubernetes.io/hostname
+
+extraEnv:
+  - name: MODEL_REPOSITORY_URL
+    value: s3://risk-models/latest
+  - name: FEATURE_TOGGLE_BEHAVIORAL
+    value: "true"
+
+extraEnvFrom:
+  - secretRef:
+      name: risk-engine-secrets
+
+extraVolumes:
+  - name: model-cache
+    emptyDir:
+      medium: Memory
+      sizeLimit: 1Gi
+
+extraVolumeMounts: []
+
+initContainer:
+  enabled: true
+  image: your-repo/model-fetcher:0.4.0
+  imagePullPolicy: IfNotPresent
+
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: topology.kubernetes.io/zone
+    whenUnsatisfiable: DoNotSchedule
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/name: risk-engine

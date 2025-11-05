@@ -1,0 +1,106 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36" version="28.2.9">
+  <diagram name="Page-1" id="9Zx5BaE8rxrUkNnXBEa4">
+    <mxGraphModel dx="2633" dy="1427" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1100" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="container" value="Integrated Digital Bank with Web3 (Container)" style="swimlane;html=1;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeLast=0;container=1;fontSize=14;fontStyle=1;align=center;rounded=1;strokeWidth=2;fillColor=#f5f5f5;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry x="40" y="40" width="1200" height="1200" as="geometry" />
+        </mxCell>
+        <mxCell id="traditional_group" value="Traditional Components" style="swimlane;html=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeLast=0;container=1;fontSize=12;fontStyle=1;align=center;rounded=1;strokeWidth=1;fillColor=#ffffff;strokeColor=#999999;" parent="container" vertex="1">
+          <mxGeometry x="20" y="60" width="300" height="780" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_cust_onboard" value="Customer Onboarding &amp; KYC API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=10;fontSize=12;" parent="traditional_group" vertex="1">
+          <mxGeometry x="10" y="40" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_accounts" value="Accounts &amp; Balances API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=10;fontSize=12;" parent="traditional_group" vertex="1">
+          <mxGeometry x="10" y="90" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_payments" value="Payments &amp; Transfers API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=10;fontSize=12;" parent="traditional_group" vertex="1">
+          <mxGeometry x="10" y="140" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_lending" value="Lending &amp; Credit API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=10;fontSize=12;" parent="traditional_group" vertex="1">
+          <mxGeometry x="10" y="190" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_aml" value="AML &amp; Compliance Rules Engine API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=10;fontSize=12;" parent="traditional_group" vertex="1">
+          <mxGeometry x="10" y="240" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_risk" value="Risk &amp; Fraud Scoring API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=10;fontSize=12;" parent="traditional_group" vertex="1">
+          <mxGeometry x="10" y="290" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_cards" value="Card Management API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=10;fontSize=12;" parent="traditional_group" vertex="1">
+          <mxGeometry x="10" y="340" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_treasury" value="Treasury &amp; Liquidity Management API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=10;fontSize=12;" parent="traditional_group" vertex="1">
+          <mxGeometry x="10" y="390" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_analytics" value="Data Analytics &amp; Reporting API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=10;fontSize=12;" parent="traditional_group" vertex="1">
+          <mxGeometry x="10" y="440" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_dev_portal" value="Developer Portal &amp; Open Banking API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=10;fontSize=12;" parent="traditional_group" vertex="1">
+          <mxGeometry x="10" y="490" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_invest" value="Investment &amp; Wealth Management API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=10;fontSize=12;" parent="traditional_group" vertex="1">
+          <mxGeometry x="10" y="540" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_cust_support" value="Customer Support &amp; Notifications API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=10;fontSize=12;" parent="traditional_group" vertex="1">
+          <mxGeometry x="10" y="590" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_branch" value="Branch &amp; ATM Integration API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=10;fontSize=12;" parent="traditional_group" vertex="1">
+          <mxGeometry x="10" y="640" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="kafka" value="Kafka Streaming Platform [Component]&lt;br&gt;Event-driven messaging" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;arcSize=10;fontSize=12;align=center;verticalAlign=middle;" parent="container" vertex="1">
+          <mxGeometry x="340" y="60" width="300" height="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="web3_group" value="Web3 Components" style="swimlane;html=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeLast=0;container=1;fontSize=12;fontStyle=1;align=center;rounded=1;strokeWidth=1;fillColor=#ffffff;strokeColor=#999999;" parent="container" vertex="1">
+          <mxGeometry x="660" y="60" width="300" height="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_crypto_wallets" value="Crypto Wallets &amp; Custody API [Component]&lt;br&gt;REST/gRPC for digital asset management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=10;fontSize=12;" parent="web3_group" vertex="1">
+          <mxGeometry x="10" y="40" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_blockchain_gateway" value="Blockchain Gateway API [Component]&lt;br&gt;Abstract layer over blockchain RPC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=10;fontSize=12;" parent="web3_group" vertex="1">
+          <mxGeometry x="10" y="100" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_defi_integrations" value="DeFi Integrations API [Component]&lt;br&gt;REST/GraphQL for DeFi protocols" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=10;fontSize=12;" parent="web3_group" vertex="1">
+          <mxGeometry x="10" y="160" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_aml_web3" value="AML &amp; Compliance Rules Engine API (Web3 Adapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=10;fontSize=12;" parent="web3_group" vertex="1">
+          <mxGeometry x="10" y="220" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_risk_web3" value="Risk &amp; Scoring API (for on-chain)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=10;fontSize=12;" parent="web3_group" vertex="1">
+          <mxGeometry x="10" y="280" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_smart_contracts" value="Smart Contracts Registry API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=10;fontSize=12;" parent="web3_group" vertex="1">
+          <mxGeometry x="10" y="340" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_token_issuance" value="Token Issuance &amp; Management API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=10;fontSize=12;" parent="web3_group" vertex="1">
+          <mxGeometry x="10" y="400" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_treasury_web3" value="Treasury &amp; Liquidity Management API (with cross-chain)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=10;fontSize=12;" parent="web3_group" vertex="1">
+          <mxGeometry x="10" y="460" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_analytics_web3" value="Data Analytics &amp; Reporting API (incl. on-chain)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=10;fontSize=12;" parent="web3_group" vertex="1">
+          <mxGeometry x="10" y="520" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_dev_portal_web3" value="Developer Portal API (with Web3 modules)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=10;fontSize=12;" parent="web3_group" vertex="1">
+          <mxGeometry x="10" y="580" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_trad1" value="publishes/subscribes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.1;jettySize=auto;orthogonalLoop=1;fontSize=10;" parent="container" source="comp_cust_onboard" target="kafka" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_trad2" value="publishes/subscribes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.2;jettySize=auto;orthogonalLoop=1;fontSize=10;" parent="container" source="comp_accounts" target="kafka" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_web31" value="publishes/subscribes to crypto topics" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.1;jettySize=auto;orthogonalLoop=1;fontSize=10;" parent="container" source="comp_crypto_wallets" target="kafka" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_web32" value="publishes/subscribes to blockchain events" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.2;jettySize=auto;orthogonalLoop=1;fontSize=10;" parent="container" source="comp_blockchain_gateway" target="kafka" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="integration_edge1" value="integrates via API/Events" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.8;entryX=0;entryY=0.8;dashed=1;jettySize=auto;orthogonalLoop=1;fontSize=10;" parent="container" source="traditional_group" target="web3_group" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

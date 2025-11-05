@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "payments-orchestrator.fullname" . }}
+  labels:
+    {{- include "payments-orchestrator.labels" . | nindent 4 }}
+  annotations:
+    checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "payments-orchestrator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "payments-orchestrator.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "payments-orchestrator.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: payments-orchestrator
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+            - name: grpc
+              containerPort: 7443
+              protocol: TCP
+            - name: metrics
+              containerPort: 9102
+              protocol: TCP
+          env:
+            - name: QUEUE_CONSUMERS_SETTLEMENTS
+              value: "{{ .Values.queueConsumers.settlements }}"
+            - name: QUEUE_CONSUMERS_COMPLIANCE
+              value: "{{ .Values.queueConsumers.compliance }}"
+            - name: QUEUE_CONSUMERS_TREASURY
+              value: "{{ .Values.queueConsumers.treasury }}"
+            - name: KAFKA_TOPIC_PREFIX
+              value: {{ .Values.kafka.topicPrefix | quote }}
+            - name: KAFKA_CONSUMER_GROUP
+              value: {{ .Values.kafka.consumerGroup | quote }}
+            - name: REDIS_HOST
+              value: {{ .Values.redis.host | quote }}
+            - name: REDIS_PORT
+              value: "{{ .Values.redis.port }}"
+            - name: REDIS_TLS
+              value: "{{ .Values.redis.tlsEnabled }}"
+            - name: CIRCUIT_BREAKER_MAX_ERRORS
+              value: "{{ .Values.circuitBreaker.maxErrors }}"
+            - name: CIRCUIT_BREAKER_RESET_SECONDS
+              value: "{{ .Values.circuitBreaker.resetSeconds }}"
+            - name: RATE_LIMIT_DEFAULT
+              value: "{{ .Values.rateLimits.perTenant.default }}"
+            - name: RATE_LIMIT_PREMIUM
+              value: "{{ .Values.rateLimits.perTenant.premium }}"
+            - name: FEATURE_INSTANT_SEPA
+              value: "{{ .Values.featureFlags.enableInstantSepa }}"
+            - name: FEATURE_CRYPTO_OFFRAMP
+              value: "{{ .Values.featureFlags.enableCryptoOffRamp }}"
+            {{- range .Values.extraEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+          {{- with .Values.extraEnvFrom }}
+          envFrom:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.startupProbe }}
+          startupProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: app-config
+              mountPath: /etc/payments
+              readOnly: true
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: app-config
+          configMap:
+            name: {{ include "payments-orchestrator.fullname" . }}-config
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

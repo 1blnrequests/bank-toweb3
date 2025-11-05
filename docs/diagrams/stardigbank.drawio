@@ -1,0 +1,118 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36" version="28.2.9">
+  <diagram name="Page-1" id="GpX1OKreRVuxd3OhUtbq">
+    <mxGraphModel dx="1693" dy="966" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="STAR Case – Data Ownership &amp; Compliance Conflict (Bank × Web3 Integration)" style="text;fontSize=20;fontStyle=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry y="20" width="1600" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="mainContainer" value="" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cccccc;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="50" y="80" width="1500" height="926" as="geometry" />
+        </mxCell>
+        <mxCell id="situationHeader" value="SITUATION" style="text;fontSize=18;fontStyle=1;fillColor=none;strokeColor=none;align=center;verticalAlign=top;" parent="mainContainer" vertex="1">
+          <mxGeometry x="60" y="30" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="situation" value="&lt;b&gt;Context:&lt;/b&gt; Bank launching digital asset platform with Web3 integration&lt;br&gt;&lt;br&gt;&lt;b&gt;Key Challenges:&lt;/b&gt;&lt;br&gt;• No defined data ownership between Core Banking and Web3 platform&lt;br&gt;• Compliance uncertainty on transaction authority boundaries&lt;br&gt;• Regulatory conflicts blocking integration progress&lt;br&gt;• Audit trail gaps between traditional and blockchain systems&lt;br&gt;• Multiple stakeholders with conflicting requirements&lt;br&gt;&lt;br&gt;&lt;b&gt;Stakeholders Involved:&lt;/b&gt;&lt;br&gt;• Bank Core Banking Team&lt;br&gt;• Web3 Vendor&lt;br&gt;• Compliance &amp; Legal&lt;br&gt;• Risk Management&lt;br&gt;• Architecture Review Board" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#fff2f2;strokeColor=#ffcccc;align=left;fontSize=13;spacingLeft=10;" parent="mainContainer" vertex="1">
+          <mxGeometry x="60" y="70" width="320" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="taskHeader" value="TASK" style="text;fontSize=18;fontStyle=1;fillColor=none;strokeColor=none;align=center;verticalAlign=top;" parent="mainContainer" vertex="1">
+          <mxGeometry x="430" y="30" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="task" value="&lt;b&gt;Primary Objectives:&lt;/b&gt;&lt;br&gt;• Define compliant architecture resolving data authority conflicts&lt;br&gt;• Establish clear ownership boundaries between systems&lt;br&gt;• Ensure regulatory compliance and audit readiness&lt;br&gt;&lt;br&gt;&lt;b&gt;Key Deliverables:&lt;/b&gt;&lt;br&gt;• Data ownership matrix&lt;br&gt;• Transaction authority framework&lt;br&gt;• Compliance alignment across three parties&lt;br&gt;• Traceability and audit requirements&lt;br&gt;&lt;br&gt;&lt;b&gt;Success Criteria:&lt;/b&gt;&lt;br&gt;• Steering Committee approval&lt;br&gt;• Compliance sign-off&lt;br&gt;• Vendor alignment&lt;br&gt;• Architecture board endorsement" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#fff9f0;strokeColor=#ffd699;align=left;fontSize=13;spacingLeft=10;" parent="mainContainer" vertex="1">
+          <mxGeometry x="430" y="70" width="320" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="actionHeader" value="ACTION" style="text;fontSize=18;fontStyle=1;fillColor=none;strokeColor=none;align=center;verticalAlign=top;" parent="mainContainer" vertex="1">
+          <mxGeometry x="800" y="30" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="action" value="&lt;b&gt;Strategic Approach:&lt;/b&gt;&lt;br&gt;• Facilitated architecture &amp; compliance workshops (Bank + Vendor)&lt;br&gt;• Conducted gap analysis on regulatory requirements&lt;br&gt;&lt;br&gt;&lt;b&gt;Architecture Solution:&lt;/b&gt;&lt;br&gt;• Introduced Dual-Domain Model:&lt;br&gt;  - Core Banking = Source of Truth&lt;br&gt;  - Web3 Platform = Sub-ledger&lt;br&gt;• Defined one-directional data flow via Kafka &amp; AML Adapter&lt;br&gt;• Implemented event sourcing pattern&lt;br&gt;&lt;br&gt;&lt;b&gt;Documentation &amp; Governance:&lt;/b&gt;&lt;br&gt;• Documented ADR-004 (Data Authority Decision)&lt;br&gt;• Updated IAM and audit trail standards&lt;br&gt;• Created data flow diagrams&lt;br&gt;• Established change control process" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#f0f7ff;strokeColor=#a6c5e5;align=left;fontSize=13;spacingLeft=10;" parent="mainContainer" vertex="1">
+          <mxGeometry x="800" y="70" width="320" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="resultHeader" value="RESULT" style="text;fontSize=18;fontStyle=1;fillColor=none;strokeColor=none;align=center;verticalAlign=top;" parent="mainContainer" vertex="1">
+          <mxGeometry x="1170" y="30" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="result" value="&lt;b&gt;Immediate Outcomes:&lt;/b&gt;&lt;br&gt;• Conflict resolved – alignment across all stakeholders&lt;br&gt;• Integration unblocked and approved by Steering Committee&lt;br&gt;• Architecture became regulatory reference model&lt;br&gt;&lt;br&gt;&lt;b&gt;Quantitative Benefits:&lt;/b&gt;&lt;br&gt;• Prevented 3+ months project delay&lt;br&gt;• Eliminated audit compliance risks&lt;br&gt;• Reduced integration complexity by 40%&lt;br&gt;&lt;br&gt;&lt;b&gt;Strategic Impact:&lt;/b&gt;&lt;br&gt;• Foundation for all digital asset initiatives&lt;br&gt;• Reusable compliance framework&lt;br&gt;• Enhanced stakeholder confidence&lt;br&gt;• Scalable model for future integrations" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#f0fff0;strokeColor=#a5d6a5;align=left;fontSize=13;spacingLeft=10;" parent="mainContainer" vertex="1">
+          <mxGeometry x="1170" y="70" width="320" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="archSectionHeader" value="Solution Architecture Overview" style="text;fontSize=16;fontStyle=1;fillColor=none;strokeColor=none;align=center;verticalAlign=top;" parent="mainContainer" vertex="1">
+          <mxGeometry y="470" width="1500" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="coreBanking" value="Core Banking System&lt;br&gt;&lt;font style=&#39;font-size:11px;color:#666666;&#39;&gt;(Source of Truth)&lt;/font&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="mainContainer" vertex="1">
+          <mxGeometry x="100" y="520" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="kafkaBus" value="Kafka Event Bus&lt;br&gt;&lt;font style=&#39;font-size:11px;color:#666666;&#39;&gt;(One-directional Flow)&lt;/font&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="mainContainer" vertex="1">
+          <mxGeometry x="320" y="520" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="amlAdapter" value="AML Compliance Adapter&lt;br&gt;&lt;font style=&#39;font-size:11px;color:#666666;&#39;&gt;(Real-time Screening)&lt;/font&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="mainContainer" vertex="1">
+          <mxGeometry x="500" y="520" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="web3Platform" value="Web3 Platform&lt;br&gt;&lt;font style=&#39;font-size:11px;color:#666666;&#39;&gt;(Sub-ledger)&lt;/font&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="mainContainer" vertex="1">
+          <mxGeometry x="680" y="520" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="auditSystem" value="Audit Trail System&lt;br&gt;&lt;font style=&#39;font-size:11px;color:#666666;&#39;&gt;(Immutable Records)&lt;/font&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="mainContainer" vertex="1">
+          <mxGeometry x="900" y="520" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="iamSystem" value="IAM System&lt;br&gt;&lt;font style=&#39;font-size:11px;color:#666666;&#39;&gt;(Access Control)&lt;/font&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="mainContainer" vertex="1">
+          <mxGeometry x="1080" y="520" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="flow1" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#6c8ebf;" parent="mainContainer" source="coreBanking" target="kafkaBus" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow2" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#d79b00;" parent="mainContainer" source="kafkaBus" target="amlAdapter" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow3" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#82b366;" parent="mainContainer" source="amlAdapter" target="web3Platform" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow4" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#9673a6;dashed=1;" parent="mainContainer" source="web3Platform" target="auditSystem" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow5" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#d6b656;dashed=1;" parent="mainContainer" source="iamSystem" target="web3Platform" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="principlesHeader" value="Key Architecture Principles" style="text;fontSize=16;fontStyle=1;fillColor=none;strokeColor=none;align=center;verticalAlign=top;" parent="mainContainer" vertex="1">
+          <mxGeometry y="620" width="1500" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="principle1" value="&lt;b&gt;Single Source of Truth&lt;/b&gt;&lt;br&gt;Core Banking maintains master data records" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#f0f7ff;strokeColor=#6c8ebf;align=center;fontSize=12;" parent="mainContainer" vertex="1">
+          <mxGeometry x="100" y="670" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="principle2" value="&lt;b&gt;One-directional Data Flow&lt;/b&gt;&lt;br&gt;Data flows Core → Web3, never reverse" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#fff9f0;strokeColor=#d79b00;align=center;fontSize=12;" parent="mainContainer" vertex="1">
+          <mxGeometry x="350" y="670" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="principle3" value="&lt;b&gt;Compliance by Design&lt;/b&gt;&lt;br&gt;AML screening integrated in data flow" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#fff2f2;strokeColor=#b85450;align=center;fontSize=12;" parent="mainContainer" vertex="1">
+          <mxGeometry x="600" y="670" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="principle4" value="&lt;b&gt;Immutable Audit Trail&lt;/b&gt;&lt;br&gt;All transactions logged for compliance" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#f0fff0;strokeColor=#82b366;align=center;fontSize=12;" parent="mainContainer" vertex="1">
+          <mxGeometry x="850" y="670" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="principle5" value="&lt;b&gt;Clear Ownership&lt;/b&gt;&lt;br&gt;Well-defined responsibility boundaries" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#f5f5f5;strokeColor=#666666;align=center;fontSize=12;" parent="mainContainer" vertex="1">
+          <mxGeometry x="1100" y="670" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="metricsHeader" value="Business Impact Metrics" style="text;fontSize=16;fontStyle=1;fillColor=none;strokeColor=none;align=center;verticalAlign=top;" parent="mainContainer" vertex="1">
+          <mxGeometry y="750" width="1500" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="metric1" value="&lt;b&gt;Time to Market&lt;/b&gt;&lt;br&gt;3+ months saved" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#e1f5fe;strokeColor=#4fc3f7;align=center;fontSize=12;" parent="mainContainer" vertex="1">
+          <mxGeometry x="100" y="800" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="metric2" value="&lt;b&gt;Compliance Risk&lt;/b&gt;&lt;br&gt;Audit issues prevented" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#f3e5f5;strokeColor=#ba68c8;align=center;fontSize=12;" parent="mainContainer" vertex="1">
+          <mxGeometry x="300" y="800" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="metric3" value="&lt;b&gt;Integration Complexity&lt;/b&gt;&lt;br&gt;40% reduction" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#e8f5e8;strokeColor=#66bb6a;align=center;fontSize=12;" parent="mainContainer" vertex="1">
+          <mxGeometry x="500" y="800" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="metric4" value="&lt;b&gt;Stakeholder Alignment&lt;/b&gt;&lt;br&gt;5 teams synchronized" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#fff3e0;strokeColor=#ffb74d;align=center;fontSize=12;" parent="mainContainer" vertex="1">
+          <mxGeometry x="700" y="800" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="metric5" value="&lt;b&gt;Reusability&lt;/b&gt;&lt;br&gt;Foundation for future initiatives" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#fce4ec;strokeColor=#f06292;align=center;fontSize=12;" parent="mainContainer" vertex="1">
+          <mxGeometry x="900" y="800" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="metric6" value="&lt;b&gt;Regulatory Reference&lt;/b&gt;&lt;br&gt;Approved architecture model" style="shape=rectangle;whiteSpace=wrap;html=1;rounded=1;fillColor=#e0f2f1;strokeColor=#4db6ac;align=center;fontSize=12;" parent="mainContainer" vertex="1">
+          <mxGeometry x="1100" y="800" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="footer" value="STAR Methodology Applied: Situation → Task → Action → Result | Architecture Decision Record ADR-004" style="text;fontSize=12;fontStyle=0;fillColor=none;strokeColor=none;align=center;verticalAlign=top;" parent="mainContainer" vertex="1">
+          <mxGeometry y="890" width="1500" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

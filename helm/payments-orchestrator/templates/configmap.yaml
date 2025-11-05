@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "payments-orchestrator.fullname" . }}-config
+  labels:
+    {{- include "payments-orchestrator.labels" . | nindent 4 }}
+data:
+  application.yaml: |
+    kafka:
+      enabled: {{ .Values.kafka.enabled }}
+      brokersSecret: {{ .Values.kafka.brokersSecret }}
+      topicPrefix: {{ .Values.kafka.topicPrefix }}
+    redis:
+      enabled: {{ .Values.redis.enabled }}
+      host: {{ .Values.redis.host }}
+      port: {{ .Values.redis.port }}
+      tlsEnabled: {{ .Values.redis.tlsEnabled }}
+    rateLimits:
+      perTenant:
+        default: {{ .Values.rateLimits.perTenant.default }}
+        premium: {{ .Values.rateLimits.perTenant.premium }}

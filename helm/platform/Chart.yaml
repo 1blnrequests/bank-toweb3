@@ -1,0 +1,24 @@
+apiVersion: v2
+name: web3-platform
+version: 0.2.0
+description: Umbrella chart bundling the digital bank Web3 workloads
+type: application
+dependencies:
+  - name: web3-gateway
+    version: 0.1.0
+    repository: "file://../web3-gateway"
+  - name: custody-service
+    version: 0.1.0
+    repository: "file://../custody-service"
+  - name: aml-adapter
+    version: 0.1.0
+    repository: "file://../aml-adapter"
+  - name: customer-onboarding
+    version: 0.1.0
+    repository: "file://../customer-onboarding"
+  - name: payments-orchestrator
+    version: 0.1.0
+    repository: "file://../payments-orchestrator"
+  - name: risk-engine
+    version: 0.1.0
+    repository: "file://../risk-engine"

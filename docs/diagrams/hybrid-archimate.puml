@@ -1,0 +1,89 @@
+@startuml HybridWeb3ArchiMate
+' ArchiMate-inspired PlantUML diagram representing hybrid Web3 integration.
+' Render with: plantuml -tsvg docs/diagrams/hybrid-archimate.puml
+
+skinparam backgroundColor #ffffff
+skinparam shadowing false
+skinparam handwritten false
+
+' Motivation View
+rectangle "Regulatory Trust\n<<Driver>>" as DriverTrust #f4f6fb
+rectangle "Hybrid Resilience\n<<Goal>>" as GoalResilience #e3f2fd
+rectangle "Zero-Trust Enforcement\n<<Requirement>>" as ReqZeroTrust #fff3e0
+rectangle "Immutable Audit Trail\n<<Requirement>>" as ReqAudit #fff3e0
+rectangle "Programmable Finance\n<<Goal>>" as GoalProgrammable #e3f2fd
+rectangle "Innovation Demand\n<<Driver>>" as DriverInnovation #f4f6fb
+
+DriverTrust --> GoalResilience
+GoalResilience --> ReqZeroTrust
+GoalResilience --> ReqAudit
+DriverInnovation --> GoalProgrammable
+GoalProgrammable --> ReqZeroTrust
+GoalProgrammable --> ReqAudit
+
+' Application Cooperation View
+package "Application Layer" {
+  rectangle "Smart-Contract Engine\n<<ApplicationComponent>>" as AppSmartContract #ede7f6
+  rectangle "DID Registry Service\n<<ApplicationComponent>>" as AppDID #ede7f6
+  rectangle "Payments API Gateway\n<<ApplicationComponent>>" as AppPayments #ede7f6
+  rectangle "AML Case Manager\n<<ApplicationComponent>>" as AppAML #ede7f6
+  rectangle "Treasury Analytics\n<<ApplicationComponent>>" as AppTreasury #ede7f6
+  rectangle "Legacy Core Banking\n<<ApplicationComponent>>" as AppCore #ede7f6
+}
+
+rectangle "Event Streaming\n(corebank.* topics)\n<<ApplicationService>>" as ServiceKafka #e8f5e9
+rectangle "Identity Federation\n<<ApplicationService>>" as ServiceIdentity #e8f5e9
+rectangle "Settlement Orchestration\n<<ApplicationService>>" as ServiceSettlement #e8f5e9
+
+AppSmartContract --> ServiceSettlement
+AppDID --> ServiceIdentity
+AppPayments --> ServiceSettlement
+AppAML --> ServiceKafka
+AppTreasury --> ServiceKafka
+AppCore --> ServiceSettlement
+AppCore --> ServiceKafka
+ServiceIdentity --> AppPayments
+ServiceKafka --> AppAML
+ServiceKafka --> AppTreasury
+ServiceSettlement --> AppCore
+
+' Technology & Physical View
+package "Technology Layer" {
+  rectangle "AWS EKS Cluster\n<<Node>>" as NodeEKS #e1f5fe
+  rectangle "AWS Managed Kafka\n<<Node>>" as NodeMSK #e1f5fe
+  rectangle "AWS Control Plane Services\n(VPC, IAM, CloudWatch)\n<<InfrastructureService>>" as InfraAWS #e1f5fe
+  rectangle "vSphere Compute Cluster\n<<Node>>" as NodeVSphere #fce4ec
+  rectangle "MinIO Object Storage\n<<Node>>" as NodeMinio #fff8e1
+  rectangle "Observability Stack\n(Prometheus/Grafana)\n<<InfrastructureService>>" as InfraObs #e1f5fe
+  rectangle "GitOps Pipeline\n(GitHub Actions + ArgoCD)\n<<InfrastructureService>>" as InfraGitOps #e1f5fe
+}
+
+NodeEKS --> AppSmartContract
+NodeEKS --> AppDID
+NodeEKS --> AppPayments
+NodeEKS --> AppAML
+NodeEKS --> AppTreasury
+NodeMSK --> ServiceKafka
+NodeVSphere --> AppSmartContract
+NodeVSphere --> AppDID
+NodeVSphere --> AppTreasury
+NodeMinio --> ServiceSettlement
+NodeMinio --> AppAML
+InfraAWS --> NodeEKS
+InfraAWS --> NodeMSK
+InfraAWS --> InfraGitOps
+InfraGitOps --> NodeEKS
+InfraGitOps --> NodeVSphere
+InfraGitOps --> NodeMinio
+InfraObs --> NodeEKS
+InfraObs --> NodeVSphere
+InfraObs --> NodeMinio
+InfraObs --> NodeMSK
+
+ReqZeroTrust --> InfraAWS
+ReqZeroTrust --> NodeVSphere
+ReqAudit --> NodeMinio
+ReqAudit --> InfraObs
+ReqAudit --> InfraGitOps
+
+@enduml

@@ -1,0 +1,15 @@
+apiVersion: v2
+name: custody-service
+description: MPC custody orchestration service chart
+version: 0.1.0
+appVersion: 1.0.0
+type: application
+sources:
+  - https://github.com/your-org/custody-service
+keywords:
+  - custody
+  - mpc
+  - web3
+maintainers:
+  - name: Digital Assets Team
+    email: digital-assets@your-org.com

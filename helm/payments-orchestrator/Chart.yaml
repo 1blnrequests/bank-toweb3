@@ -1,0 +1,15 @@
+apiVersion: v2
+name: payments-orchestrator
+description: Event-driven orchestration for domestic and cross-border payments
+version: 0.1.0
+appVersion: 2.3.1
+type: application
+keywords:
+  - payments
+  - orchestration
+  - psd2
+maintainers:
+  - name: Payments Guild
+    email: payments@your-org.com
+sources:
+  - https://github.com/your-org/payments-orchestrator

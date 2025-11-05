@@ -1,0 +1,79 @@
+web3-gateway:
+  replicaCount: 3
+  ingress:
+    hosts:
+      - host: api.sandbox.bank-web3.example
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: web3-gateway-sandbox-tls
+        hosts:
+          - api.sandbox.bank-web3.example
+  autoscaling:
+    minReplicas: 3
+    maxReplicas: 8
+  env:
+    - name: LOG_LEVEL
+      value: debug
+    - name: FEATURE_FLAGS
+      valueFrom:
+        configMapKeyRef:
+          name: web3-gateway-feature-flags
+          key: flags.json
+
+custody-service:
+  replicaCount: 2
+  persistence:
+    enabled: true
+    size: 10Gi
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+  autoscaling:
+    minReplicas: 2
+    maxReplicas: 6
+
+aml-adapter:
+  replicaCount: 2
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 4
+
+customer-onboarding:
+  replicaCount: 3
+  ingress:
+    hosts:
+      - host: onboarding.sandbox.bank-web3.example
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: onboarding-sandbox-tls
+        hosts:
+          - onboarding.sandbox.bank-web3.example
+  config:
+    consentTtlHours: 48
+    amlVendors:
+      - onfido
+      - trulioo
+
+payments-orchestrator:
+  replicaCount: 4
+  service:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+  kafka:
+    brokersSecret: kafka-sandbox
+  redis:
+    host: redis.sandbox.svc.cluster.local
+  featureFlags:
+    enableCryptoOffRamp: true
+
+risk-engine:
+  replicaCount: 5
+  modelRepository:
+    url: s3://risk-models/sandbox/latest
+  featureToggles:
+    enableShadowModel: true

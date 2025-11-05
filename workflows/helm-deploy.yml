@@ -1,0 +1,103 @@
+name: helm-ci
+
+on:
+  pull_request:
+    paths:
+      - 'helm/**'
+      - 'workflows/helm-deploy.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'helm/**'
+      - 'workflows/helm-deploy.yml'
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  lint:
+    name: Helm lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        chart:
+          - helm/web3-gateway
+          - helm/custody-service
+          - helm/aml-adapter
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.12.3
+
+      - name: Lint chart
+        run: helm lint ${{ matrix.chart }}
+
+  dry-run:
+    name: Helm template dry-run
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.12.3
+
+      - name: Render charts
+        run: |
+          for chart in helm/*/Chart.yaml; do
+            chart_dir=$(dirname "$chart")
+            echo "Rendering $chart_dir"
+            helm template test "$chart_dir" --namespace web3 --values "$chart_dir/values.yaml" --debug > "${chart_dir//\//-}-render.yaml"
+          done
+
+      - name: Upload manifests
+        uses: actions/upload-artifact@v4
+        with:
+          name: helm-rendered-manifests-${{ github.run_id }}
+          path: "helm-*-render.yaml"
+          retention-days: 7
+
+  publish:
+    name: Package and publish charts
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - dry-run
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.12.3
+
+      - name: Package charts
+        run: |
+          mkdir -p dist
+          for chart in helm/*/Chart.yaml; do
+            chart_dir=$(dirname "$chart")
+            helm dependency update "$chart_dir"
+            helm package "$chart_dir" --destination dist
+          done
+
+      - name: Publish to OCI registry
+        if: success()
+        env:
+          HELM_REGISTRY: ${{ vars.HELM_REGISTRY || 'ghcr.io/your-org/charts' }}
+          HELM_USERNAME: ${{ github.actor }}
+          HELM_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$HELM_PASSWORD" | helm registry login "${HELM_REGISTRY%/*}" --username "$HELM_USERNAME" --password-stdin
+          for package in dist/*.tgz; do
+            helm push "$package" oci://$HELM_REGISTRY
+          done

@@ -1,0 +1,251 @@
+replicaCount: 3
+
+image:
+  repository: your-repo/web3-gateway
+  tag: 1.2.0
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/role: "web3-app"
+  vault.hashicorp.com/agent-inject-secret-config.env: secret/data/platform/web3-gateway
+
+podLabels: {}
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+  annotations: {}
+  extraPorts:
+    - name: metrics
+      port: 9090
+      targetPort: metrics
+      protocol: TCP
+
+resources:
+  limits:
+    cpu: 750m
+    memory: 768Mi
+  requests:
+    cpu: 300m
+    memory: 384Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 8
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 70
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {}
+
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              platform: web3
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: custody-service
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: TCP
+          port: 443
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 10m
+    cert-manager.io/cluster-issuer: letsencrypt
+  hosts:
+    - host: api.sandbox.bank-web3.example
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: web3-gateway-tls
+      hosts:
+        - api.sandbox.bank-web3.example
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 2
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 2
+
+startupProbe:
+  httpGet:
+    path: /startup
+    port: http
+  failureThreshold: 30
+  periodSeconds: 5
+
+env:
+  - name: LOG_LEVEL
+    value: info
+  - name: FEATURE_FLAGS
+    valueFrom:
+      configMapKeyRef:
+        name: web3-gateway-feature-flags
+        key: flags.json
+
+extraEnvFrom: []
+
+extraVolumeMounts: []
+extraVolumes: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+topologySpreadConstraints: []
+
+config:
+  blockchainNetworks:
+    - ethereum
+    - polygon
+  rateLimitPerSecond: 150
+  circuitBreaker:
+    failureThreshold: 0.15
+    recoverySeconds: 20
+  observability:
+    requestLogSampling: 0.05
+    metrics:
+      enabled: true
+      path: /metrics
+      port: 9090
+  upstreams:
+    custodyService:
+      host: custody-service.web3.svc.cluster.local
+      port: 9090
+    amlAdapter:
+      host: aml-adapter.web3.svc.cluster.local
+      port: 7070
+  audit:
+    enabled: true
+    topic: web3-gateway-audit
+    sink: kafka
+  bankIntegrations:
+    apis:
+      processing:
+        baseUrl: https://api.corebank.local/payments
+        authProfile: oauth2-client-credentials
+        timeoutSeconds: 30
+        description: Payment order orchestration for fiat settlements.
+      billing:
+        baseUrl: https://api.corebank.local/billing/graphql
+        authProfile: mutual-tls
+        timeoutSeconds: 20
+        description: Fee and interest adjustment retrieval for reconciliations.
+      transactions:
+        baseUrl: https://api.corebank.local/ledger
+        authProfile: oauth2-client-credentials
+        timeoutSeconds: 25
+        description: Near real-time account and transaction history feed.
+      statements:
+        baseUrl: https://api.corebank.local/statements
+        authProfile: signed-service-token
+        timeoutSeconds: 60
+        description: Statement retrieval for regulatory archiving.
+      identity:
+        baseUrl: https://id.corebank.local
+        authProfile: oidc
+        timeoutSeconds: 15
+        description: Customer login validation and MFA context.
+      cybersecurity:
+        baseUrl: https://secops.corebank.local/alerts
+        authProfile: hmac-webhook
+        timeoutSeconds: 10
+        description: SIEM event intake for fraud detection.
+      notifications:
+        baseUrl: https://notify.corebank.local/hooks
+        authProfile: oauth2-client-credentials
+        timeoutSeconds: 15
+        description: Customer messaging orchestration (SMS/email/push).
+    streams:
+      payments:
+        topic: corebank.payments.posted.v1
+        consumerGroup: web3-integration
+        broker: kafka-bus.corebank.local:9092
+        format: avro
+        notes: Settled fiat transactions used for reconciliation.
+      billingAdjustments:
+        topic: corebank.billing.adjustments.v1
+        consumerGroup: web3-integration
+        broker: kafka-bus.corebank.local:9092
+        format: avro
+        notes: Fee and interest adjustments impacting custody balances.
+      statementsGenerated:
+        topic: corebank.statements.generated.v1
+        consumerGroup: web3-integration
+        broker: kafka-bus.corebank.local:9092
+        format: avro
+        notes: Statement metadata for archive ingestion.
+      authEvents:
+        topic: corebank.auth.events.v1
+        consumerGroup: web3-integration
+        broker: kafka-bus.corebank.local:9092
+        format: avro
+        notes: Login and MFA telemetry linked to blockchain actions.
+      securityAlerts:
+        topic: corebank.security.alerts.v1
+        consumerGroup: web3-integration
+        broker: kafka-bus.corebank.local:9092
+        format: avro
+        notes: Cybersecurity alerts requiring transaction holds.
+      notificationReceipts:
+        topic: corebank.notifications.dispatched.v1
+        consumerGroup: web3-integration
+        broker: kafka-bus.corebank.local:9092
+        format: avro
+        notes: Delivery receipts for customer communication compliance.

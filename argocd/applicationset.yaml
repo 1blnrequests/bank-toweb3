@@ -1,0 +1,74 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: web3-platform-environments
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - list:
+        elements:
+          - name: sandbox
+            namespace: web3-sandbox
+            valuesFile: values.yaml
+            automated: true
+          - name: staging
+            namespace: web3-staging
+            valuesFile: values-staging.yaml
+            automated: false
+          - name: production
+            namespace: web3-production
+            valuesFile: values-production.yaml
+            automated: false
+  template:
+    metadata:
+      name: web3-platform-{{ .name }}
+      labels:
+        app.kubernetes.io/part-of: bank-web3
+        app.kubernetes.io/managed-by: argocd
+        platform.bank.io/environment: {{ .name }}
+    spec:
+      project: web3-project
+      source:
+        repoURL: https://github.com/your-org/bank-web3-infra.git
+        targetRevision: main
+        path: helm/platform
+        helm:
+          releaseName: web3-platform-{{ .name }}
+          valueFiles:
+            - {{ .valuesFile }}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: {{ .namespace }}
+      syncPolicy:
+        {{- if .automated }}
+        automated:
+          prune: true
+          selfHeal: true
+        {{- end }}
+        retry:
+          limit: 5
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 10m
+        syncOptions:
+          - CreateNamespace=true
+          - RespectIgnoreDifferences=true
+        managedNamespaceMetadata:
+          labels:
+            platform: web3
+            argocd.argoproj.io/managed-by: web3-platform-{{ .name }}
+            platform.bank.io/environment: {{ .name }}
+          annotations:
+            web3.bank.io/data-classification: confidential
+      info:
+        - name: Environment
+          value: {{ .name }}
+        - name: Slack Channel
+          value: '#web3-platform-{{ .name }}'
+      ignoreDifferences:
+        - group: ""
+          kind: ConfigMap
+          jsonPointers:
+            - /data/generatedAt

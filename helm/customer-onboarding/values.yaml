@@ -1,0 +1,153 @@
+replicaCount: 3
+
+image:
+  repository: your-repo/customer-onboarding
+  tag: 1.0.0
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/role: "customer-onboarding"
+  vault.hashicorp.com/agent-inject-secret-config.env: secret/data/platform/customer-onboarding
+
+podLabels: {}
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+  annotations: {}
+  extraPorts:
+    - name: metrics
+      port: 9090
+      targetPort: metrics
+      protocol: TCP
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/proxy-body-size: 15m
+  hosts:
+    - host: onboarding.sandbox.bank-web3.example
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: onboarding-tls
+      hosts:
+        - onboarding.sandbox.bank-web3.example
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 9
+  targetCPUUtilizationPercentage: 55
+  targetMemoryUtilizationPercentage: 65
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+  initialDelaySeconds: 20
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {}
+
+config:
+  amlVendors:
+    - onfido
+    - trulioo
+  consentTtlHours: 48
+  featureFlags:
+    selfieVerification: true
+    documentWatermarking: true
+
+extraEnv:
+  - name: COUNTRY_WHITELIST
+    value: "EU,UK,US"
+  - name: CALLBACK_TOPIC
+    value: corebank.customer.onboarded.v1
+
+extraEnvFrom: []
+
+extraVolumeMounts: []
+extraVolumes: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: web3-gateway
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kafka
+      ports:
+        - protocol: TCP
+          port: 9092
+
+configMap:
+  enabled: true
+  name: customer-onboarding-config
+  data:
+    workflow.json: |
+      {
+        "steps": [
+          "capture_application",
+          "document_verification",
+          "aml_screening",
+          "account_provisioning"
+        ]
+      }

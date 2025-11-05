@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "risk-engine.fullname" . }}
+  labels:
+    {{- include "risk-engine.labels" . | nindent 4 }}
+  annotations:
+    checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "risk-engine.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "risk-engine.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "risk-engine.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.initContainer.enabled }}
+      initContainers:
+        - name: download-models
+          image: {{ .Values.initContainer.image }}
+          imagePullPolicy: {{ .Values.initContainer.imagePullPolicy }}
+          env:
+            - name: MODEL_REPOSITORY
+              value: {{ .Values.modelRepository.url | quote }}
+            - name: REFRESH_INTERVAL_SECONDS
+              value: "{{ .Values.modelRepository.refreshIntervalSeconds }}"
+          volumeMounts:
+            - name: model-cache
+              mountPath: /cache
+      {{- end }}
+      containers:
+        - name: risk-engine
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          env:
+            - name: JAVA_OPTS
+              value: {{ .Values.javaOpts | quote }}
+            - name: MODEL_REPOSITORY_URL
+              value: {{ .Values.modelRepository.url | quote }}
+            - name: MODEL_REFRESH_SECONDS
+              value: "{{ .Values.modelRepository.refreshIntervalSeconds }}"
+            - name: GRPC_CUSTODY_ENDPOINT
+              value: {{ .Values.grpcClients.custodyService | quote }}
+            - name: GRPC_PAYMENTS_ENDPOINT
+              value: {{ .Values.grpcClients.payments | quote }}
+            - name: FEATURE_BEHAVIORAL
+              value: "{{ .Values.featureToggles.enableBehavioralScoring }}"
+            - name: FEATURE_EXPLAINABILITY
+              value: "{{ .Values.featureToggles.enableExplainability }}"
+            - name: FEATURE_SHADOW_MODEL
+              value: "{{ .Values.featureToggles.enableShadowModel }}"
+            {{- if .Values.openTelemetry.enabled }}
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: {{ .Values.openTelemetry.endpoint | quote }}
+            - name: OTEL_SERVICE_NAME
+              value: {{ include "risk-engine.fullname" . | quote }}
+            {{- end }}
+            {{- range .Values.extraEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+          {{- with .Values.extraEnvFrom }}
+          envFrom:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+            - name: grpc
+              containerPort: 9443
+              protocol: TCP
+            - name: metrics
+              containerPort: 9105
+              protocol: TCP
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: model-cache
+              mountPath: /var/model-cache
+            - name: risk-engine-config
+              mountPath: /app/config
+              readOnly: true
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: risk-engine-config
+          configMap:
+            name: {{ include "risk-engine.fullname" . }}
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

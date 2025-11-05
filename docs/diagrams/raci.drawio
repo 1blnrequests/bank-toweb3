@@ -1,0 +1,156 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36" version="28.2.8">
+  <diagram name="Page-1" id="YXRVdKRCOSvEXC-ge4F-">
+    <mxGraphModel dx="1317" dy="678" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1650" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="client" value="&lt;b&gt;Client&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="50" y="150" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="regulator" value="&lt;b&gt;Regulator&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="40" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lNyv8oePCYUVTmRV_NP--4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="defi_ext" target="analytics_ext">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="defi_ext" value="&lt;b&gt;DeFi Protocols&lt;/b&gt;&lt;div&gt;Whitelisted Protocols&lt;br&gt;(Staking, Lending, AMM)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="800" y="600" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lNyv8oePCYUVTmRV_NP--6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="blockchain_ext" target="analytics_ext">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="blockchain_ext" value="&lt;b&gt;Blockchain Networks&lt;/b&gt;&lt;div&gt;Ethereum, L2s, EVM Chains&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="800" y="220" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lNyv8oePCYUVTmRV_NP--5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="analytics_ext" target="blockchain_ext">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="analytics_ext" value="&lt;b&gt;Chain Analytics Provider&lt;/b&gt;&lt;div&gt;On-Chain AML Tools&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="800" y="354" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="bank_system" value="&lt;b&gt;Bank System&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="200" y="50" width="550" height="700" as="geometry" />
+        </mxCell>
+        <mxCell id="frontends" value="&lt;b&gt;Frontends (Web/Mobile)&lt;/b&gt;&lt;div&gt;User Interfaces&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" parent="bank_system" vertex="1">
+          <mxGeometry x="50" y="100" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lNyv8oePCYUVTmRV_NP--1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="bank_system" source="crm_kyc" target="frontends">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="crm_kyc" value="&lt;b&gt;CRM &amp;amp; KYC/AML&lt;/b&gt;&lt;div&gt;Customer Data,&lt;br&gt;Compliance Checks&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" parent="bank_system" vertex="1">
+          <mxGeometry x="50" y="270" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lNyv8oePCYUVTmRV_NP--3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="bank_system" source="payment_gateway" target="core_banking">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="payment_gateway" value="&lt;b&gt;Payment Gateway&lt;/b&gt;&lt;div&gt;Fiat On/Off-Ramps&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" parent="bank_system" vertex="1">
+          <mxGeometry x="50" y="370" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="core_banking" value="&lt;b&gt;Core Banking (ABS)&lt;/b&gt;&lt;div&gt;Ledger, Accounts,&lt;br&gt;Transactions, P&amp;amp;L&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" parent="bank_system" vertex="1">
+          <mxGeometry x="50" y="450" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="web3_domain" value="&lt;b&gt;Web3 Services Domain&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#1e90ff;" parent="bank_system" vertex="1">
+          <mxGeometry x="250" y="60" width="270" height="390" as="geometry" />
+        </mxCell>
+        <mxCell id="lNyv8oePCYUVTmRV_NP--2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="web3_domain" source="client_services" target="gateway">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="client_services" value="&lt;b&gt;Client Web3 Services&lt;/b&gt;&lt;div&gt;API/SDK for Frontends&lt;br&gt;(Wallet, Portfolio, Tx)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="web3_domain" vertex="1">
+          <mxGeometry x="20" y="40" width="210" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway" value="&lt;b&gt;Web3 Gateway&lt;/b&gt;&lt;div&gt;Blockchain Access Layer&lt;br&gt;(Nodes, RPC, API)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="web3_domain" vertex="1">
+          <mxGeometry x="20" y="110" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="custody" value="&lt;b&gt;Custody &amp;amp; Key Management&lt;/b&gt;&lt;div&gt;HSM/MPC, Wallets&lt;br&gt;(Pooled/Segregated)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="web3_domain" vertex="1">
+          <mxGeometry x="20" y="230" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ledger" value="&lt;b&gt;Web3 Ledger &amp;amp; Accounting&lt;/b&gt;&lt;div&gt;Subledger, Sync with Core&lt;br&gt;(On-Chain Positions)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="web3_domain" vertex="1">
+          <mxGeometry x="20" y="310" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="conn4" value="Queries Balances" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="web3_domain" source="custody" target="ledger" edge="1">
+          <mxGeometry y="-55" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="125" y="180" as="sourcePoint" />
+            <mxPoint x="-30" y="180" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn7" value="Sync Accounting" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="bank_system" source="core_banking" target="ledger" edge="1">
+          <mxGeometry x="-0.2" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="200" y="485.9999999999998" as="sourcePoint" />
+            <mxPoint x="281.25" y="460" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="375" y="480" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn6" value="Fiat Conversions" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="bank_system" source="crm_kyc" target="payment_gateway" edge="1">
+          <mxGeometry x="-0.2381" y="-45" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="125" y="340" as="sourcePoint" />
+            <mxPoint x="220" y="240" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn1" value="Uses (Web/Mobile App)" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="client" target="frontends" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="340" as="sourcePoint" />
+            <mxPoint x="420" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn2" value="API Calls" style="endArrow=classic;html=1;rounded=0;" parent="1" source="frontends" target="client_services" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="340" as="sourcePoint" />
+            <mxPoint x="420" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn3" value="Manages Wallets" style="endArrow=classic;html=1;rounded=0;" parent="1" target="custody" edge="1">
+          <mxGeometry x="-0.3333" y="-55" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="575" y="280" as="sourcePoint" />
+            <mxPoint x="420" y="290" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn5" value="KYC Checks" style="endArrow=classic;html=1;rounded=0;" parent="1" source="frontends" target="crm_kyc" edge="1">
+          <mxGeometry x="-0.0909" y="-35" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="340" as="sourcePoint" />
+            <mxPoint x="420" y="290" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn8" value="RPC/WS Access" style="endArrow=classic;html=1;rounded=0;" parent="1" source="gateway" target="blockchain_ext" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="340" as="sourcePoint" />
+            <mxPoint x="420" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn9" value="Signs Tx via Gateway" style="endArrow=classic;html=1;rounded=0;" parent="1" source="custody" target="gateway" edge="1">
+          <mxGeometry x="-0.3333" y="55" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="340" as="sourcePoint" />
+            <mxPoint x="420" y="290" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="575" y="310" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn10" value="Adapters to Protocols" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="crm_kyc" target="defi_ext" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="340" as="sourcePoint" />
+            <mxPoint x="420" y="290" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="210" y="350" />
+              <mxPoint x="210" y="480" />
+              <mxPoint x="210" y="630" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn11" value="Compliance Reports" style="endArrow=classic;html=1;rounded=0;" parent="1" source="bank_system" target="regulator" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="340" as="sourcePoint" />
+            <mxPoint x="420" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,64 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: web3-platform-sandbox
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: web3-platform
+    app.kubernetes.io/part-of: bank-web3
+    app.kubernetes.io/managed-by: argocd
+    platform.bank.io/environment: sandbox
+  annotations:
+    argocd.argoproj.io/sync-options: PruneLast=true
+    argocd.argoproj.io/manifest-generate-paths: helm/platform
+spec:
+  project: web3-project
+  revisionHistoryLimit: 10
+  sources:
+    - repoURL: https://github.com/your-org/bank-web3-infra.git
+      targetRevision: main
+      path: helm/platform
+      helm:
+        releaseName: web3-platform-sandbox
+        skipCrds: false
+        valueFiles:
+          - values.yaml
+    - repoURL: https://github.com/your-org/bank-web3-infra.git
+      targetRevision: main
+      ref: workflows
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: web3-sandbox
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    retry:
+      limit: 5
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 10m
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+    managedNamespaceMetadata:
+      labels:
+        platform: web3
+        argocd.argoproj.io/managed-by: web3-platform-sandbox
+        platform.bank.io/environment: sandbox
+      annotations:
+        web3.bank.io/data-classification: confidential
+  info:
+    - name: Slack Channel
+      value: '#web3-platform-sandbox'
+    - name: PagerDuty Service
+      value: bank-web3-platform
+    - name: Environment
+      value: sandbox
+  ignoreDifferences:
+    - group: ""
+      kind: ConfigMap
+      jsonPointers:
+        - /data/generatedAt

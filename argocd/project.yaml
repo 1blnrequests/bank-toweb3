@@ -1,0 +1,69 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: web3-project
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: bank-web3
+spec:
+  description: Web3 banking platform GitOps project
+  sourceRepos:
+    - 'https://github.com/your-org/bank-web3-infra.git'
+    - 'https://github.com/your-org/shared-platform-charts.git'
+  destinations:
+    - namespace: web3-sandbox
+      server: https://kubernetes.default.svc
+    - namespace: web3-staging
+      server: https://kubernetes.default.svc
+    - namespace: web3-production
+      server: https://kubernetes.default.svc
+    - namespace: vault
+      server: https://kubernetes.default.svc
+    - namespace: observability
+      server: https://kubernetes.default.svc
+  sourceNamespaces:
+    - web3-sandbox
+    - web3-staging
+    - web3-production
+    - observability
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+    - group: networking.k8s.io
+      kind: Ingress
+  namespaceResourceBlacklist:
+    - group: kube-system
+      kind: Secret
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  roles:
+    - name: deployer
+      description: CI/CD pipeline access
+      policies:
+        - p, proj:web3-project:deployer, applications, sync, web3-project/*, allow
+        - p, proj:web3-project:deployer, applications, get, web3-project/*, allow
+      groups:
+        - oidc:github:web3-platform
+    - name: auditor
+      description: Read-only audit visibility
+      policies:
+        - p, proj:web3-project:auditor, applications, get, web3-project/*, allow
+  signatureKeys:
+    - keyID: 0xABCD1234
+      key: |
+        -----BEGIN PGP PUBLIC KEY BLOCK-----
+        ...redacted...
+        -----END PGP PUBLIC KEY BLOCK-----
+  orphanedResources:
+    warn: true
+    ignore:
+      - kind: ConfigMap
+        name: web3-platform-sandbox-web3-gateway-config
+        namespace: web3-sandbox
+      - kind: ConfigMap
+        name: web3-platform-sandbox-payments-orchestrator-config
+        namespace: web3-sandbox
+      - kind: ConfigMap
+        name: web3-platform-sandbox-risk-engine
+        namespace: web3-sandbox

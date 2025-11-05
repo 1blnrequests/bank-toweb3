@@ -1,0 +1,192 @@
+replicaCount: 4
+
+image:
+  repository: your-repo/payments-orchestrator
+  tag: 2.3.1
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/payments-service
+  name: ""
+
+podAnnotations:
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/role: "payments-orchestrator"
+  vault.hashicorp.com/agent-inject-secret-config.env: secret/data/platform/payments
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 8443
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb-ip
+  extraPorts:
+    - name: metrics
+      port: 9102
+      targetPort: metrics
+      protocol: TCP
+    - name: grpc
+      port: 7443
+      targetPort: grpc
+      protocol: TCP
+
+resources:
+  limits:
+    cpu: 800m
+    memory: 1024Mi
+  requests:
+    cpu: 400m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 4
+  maxReplicas: 12
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 70
+
+livenessProbe:
+  grpc:
+    port: grpc
+  initialDelaySeconds: 25
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
+startupProbe:
+  httpGet:
+    path: /startup
+    port: http
+  failureThreshold: 30
+  periodSeconds: 5
+
+serviceMonitor:
+  enabled: true
+  interval: 15s
+  scrapeTimeout: 5s
+  labels:
+    team: payments
+
+queueConsumers:
+  settlements: 6
+  compliance: 3
+  treasury: 2
+
+kafka:
+  enabled: true
+  brokersSecret: kafka-connection
+  topicPrefix: corebank.payments
+  consumerGroup: payments-orchestrator
+
+redis:
+  enabled: true
+  host: redis.payments.svc.cluster.local
+  port: 6379
+  tlsEnabled: true
+
+circuitBreaker:
+  maxErrors: 5
+  resetSeconds: 60
+
+rateLimits:
+  perTenant:
+    default: 30
+    premium: 60
+
+featureFlags:
+  enableInstantSepa: true
+  enableCryptoOffRamp: false
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 2
+
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              platform: web3
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: web3-gateway
+      ports:
+        - protocol: TCP
+          port: 8443
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kafka
+      ports:
+        - protocol: TCP
+          port: 9092
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: redis
+      ports:
+        - protocol: TCP
+          port: 6379
+
+extraEnv:
+  - name: PSD2_AUDIT_TOPIC
+    value: corebank.payments.confirmed.v1
+  - name: FX_RATE_ENDPOINT
+    value: https://fx.sandbox.bank-web3.example/api/rates
+
+extraEnvFrom:
+  - secretRef:
+      name: payments-secrets
+
+extraVolumeMounts:
+  - name: trust-bundle
+    mountPath: /etc/ssl/certs/custom
+    readOnly: true
+
+extraVolumes:
+  - name: trust-bundle
+    secret:
+      secretName: payments-trust-bundle
+
+nodeSelector: {}
+
+tolerations:
+  - key: dedicated
+    operator: Equal
+    value: payments
+    effect: NoSchedule
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: payments-orchestrator
+          topologyKey: topology.kubernetes.io/zone
+
+serviceAccountAnnotations: {}
